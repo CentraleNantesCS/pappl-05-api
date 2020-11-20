@@ -1,0 +1,57 @@
+
+users_roles:
+- user_id
+- role_id
+
+users:
+- id
+- lastname
+- firstname
+- email
+- password
+- acronym
+
+period:
+- id
+- start
+- end
+
+specialisations:
+- id
+- acronym
+- title
+
+subjects:
+- id
+- acronym
+- name
+
+user_specialisation:
+- user_id
+- specialisation_id
+
+specialisations_subjects:
+- specialisation_id
+- subject_id
+
+event:
+- id
+- start
+- end
+- event_type_id
+- remote
+- subject_id
+
+event_types:
+- id
+- acronym
+- name
+
+calendars:
+- id
+- classe_id
+
+classes:
+- id
+- start_year
+- end_year
