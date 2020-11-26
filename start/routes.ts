@@ -31,6 +31,14 @@ Route.group(() => {
   Route.group(() => {
     Route.get('/', 'UsersController.currentUser')
   }).prefix('/user')
+  // Resources routes
+  Route.resource('users', 'UsersController').apiOnly()
+  Route.resource('calendars', 'CalendarsController').apiOnly()
+  Route.resource('classes', 'ClassesController').apiOnly()
+  Route.resource('events', 'EventsController').apiOnly()
+  Route.resource('periods', 'PeriodsController').apiOnly()
+  Route.resource('specialisation', 'SpecialisationsController').apiOnly()
+  Route.resource('subjects', 'SubjectsController').apiOnly()
 }).prefix('/api')
 
 Route.get('health', async ({ response }) => {

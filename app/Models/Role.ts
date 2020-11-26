@@ -9,6 +9,9 @@ export default class Role extends BaseModel {
   @column()
   public name: string
 
+  @column()
+  public display_name: string
+
   @manyToMany(() => Permission, {
     localKey: 'id',
     pivotForeignKey: 'role_id',
