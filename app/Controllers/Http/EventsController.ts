@@ -12,4 +12,27 @@ export default class EventsController {
 
     return events
   }
+
+  public async store({ auth }: HttpContextContract) {
+    await auth.authenticate()
+    // TODO
+    return
+  }
+  public async update({ auth }: HttpContextContract) {
+    await auth.authenticate()
+    // TODO
+    return
+  }
+  public async delete({ auth }: HttpContextContract) {
+    await auth.authenticate()
+
+    if (!params?.id) {
+      return response.status(404)
+    }
+
+    const event = await Event.findOrFail(params.id)
+    await event.delete()
+
+    return response.status(200).send()
+  }
 }

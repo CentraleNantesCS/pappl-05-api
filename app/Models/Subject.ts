@@ -5,6 +5,12 @@ export default class Subject extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
+  @column()
+  public acronym: string
+
+  @column()
+  public name: string
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

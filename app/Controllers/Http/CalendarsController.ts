@@ -13,4 +13,16 @@ export default class CalendarsController {
 
     return calendars
   }
+  public async store({ auth }: HttpContextContract) {
+    await auth.authenticate()
+    return
+  }
+  public async update({ auth }: HttpContextContract) {
+    await auth.authenticate()
+    return
+  }
+  public async delete({ auth }: HttpContextContract) {
+    await auth.authenticate()
+    return
+  }
 }
