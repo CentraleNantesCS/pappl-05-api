@@ -10,7 +10,7 @@ export default class Specialisation extends BaseModel {
   public acronym: string
 
   @column()
-  public title: string
+  public name: string
 
   @manyToMany(() => Subject, {
     localKey: 'id',

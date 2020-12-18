@@ -37,7 +37,7 @@ Route.group(() => {
   Route.resource('classes', 'ClassesController').apiOnly()
   Route.resource('events', 'EventsController').apiOnly()
   Route.resource('periods', 'PeriodsController').apiOnly()
-  Route.resource('specialisation', 'SpecialisationsController').apiOnly()
+  Route.resource('specialisations', 'SpecialisationsController').apiOnly()
   Route.resource('subjects', 'SubjectsController').apiOnly()
 }).prefix('/api')
 

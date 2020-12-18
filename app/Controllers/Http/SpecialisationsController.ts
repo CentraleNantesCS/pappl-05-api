@@ -8,7 +8,7 @@ export default class SpecialisationsController {
   public async index({ auth }: HttpContextContract) {
     await auth.authenticate()
     //
-    const specialisations = await Specialisation.all()
+    const specialisations = await Specialisation.query().preload('subjects')
 
     return specialisations
   }
@@ -19,7 +19,7 @@ export default class SpecialisationsController {
   public async store({ auth, request }: HttpContextContract) {
     await auth.authenticate()
 
-    const { title, acronym, subjects } = request.only(['title', 'acronym', 'subjects'])
+    const { name, acronym, subjects } = request.only(['name', 'acronym', 'subjects'])
 
     const specialisation = await Specialisation.create({
       name,
