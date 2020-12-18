@@ -42,7 +42,7 @@ export default class SpecialisationsController {
     if (!params?.id) {
       return response.status(422).send('Missing params.')
     }
-    const { title, acronym, subjects } = request.only(['title', 'acronym', 'subjects'])
+    const { name, acronym, subjects } = request.only(['name', 'acronym', 'subjects'])
     const specialisation = await Specialisation.findOrFail(params.id)
 
     specialisation.name = name
@@ -66,6 +66,6 @@ export default class SpecialisationsController {
     const specialisation = await Specialisation.findOrFail(params.id)
     await specialisation.delete()
 
-    return response.status(200).send()
+    return response.status(200).send(null)
   }
 }

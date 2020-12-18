@@ -11,6 +11,9 @@ export default class Calendar extends BaseModel {
   @column()
   public classe_id: number
 
+  @column()
+  public specialisation_id: number
+
   @belongsTo(() => Class, {
     foreignKey: 'classe_id',
   })
