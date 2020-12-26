@@ -34,6 +34,7 @@ Route.group(() => {
   // Resources routes
   Route.resource('users', 'UsersController').apiOnly()
   Route.resource('calendars', 'CalendarsController').apiOnly()
+  Route.get('calendar/events/types', 'CalendarsController.getEventTypes')
   Route.resource('classes', 'ClassesController').apiOnly()
   Route.resource('events', 'EventsController').apiOnly()
   Route.resource('periods', 'PeriodsController').apiOnly()

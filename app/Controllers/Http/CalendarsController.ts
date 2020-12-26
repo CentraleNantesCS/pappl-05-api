@@ -1,6 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import Calendar from 'App/Models/Calendar'
+import EventType from 'App/Models/EventType'
 
 export default class CalendarsController {
   /**
@@ -12,6 +13,32 @@ export default class CalendarsController {
     const calendars = await Calendar.query().preload('classe').preload('specialisation')
 
     return calendars
+  }
+
+  public async show({ auth, params, response }: HttpContextContract) {
+    await auth.authenticate()
+    const calendarID = params?.id ?? null
+
+    if (!calendarID) {
+      response.status(404).send(null)
+    }
+
+    const calendar = await Calendar.query()
+      .where('id', calendarID)
+      .preload('classe')
+      .preload('specialisation')
+      .preload('events')
+      .first()
+
+    return calendar
+  }
+
+  public async getEventTypes({ auth }: HttpContextContract) {
+    await auth.authenticate()
+    //
+    const eventTypes = await EventType.query()
+
+    return eventTypes
   }
 
   public async store({ auth, request }: HttpContextContract) {
