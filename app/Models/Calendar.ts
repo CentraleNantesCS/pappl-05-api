@@ -25,7 +25,7 @@ export default class Calendar extends BaseModel {
   public specialisation: BelongsTo<typeof Specialisation>
 
   @hasMany(() => Event, {
-    foreignKey: 'id',
+    foreignKey: 'calendar_id',
   })
   public events: HasMany<typeof Event>
 

@@ -13,17 +13,67 @@ export default class EventsController {
     return events
   }
 
-  public async store({ auth }: HttpContextContract) {
+  public async store({ auth, request, response }: HttpContextContract) {
     await auth.authenticate()
-    // TODO
-    return
+
+    const { startDate, endDate, eventTypeId, remote, subjectId, calendarId } = request.only([
+      'startDate',
+      'endDate',
+      'eventTypeId',
+      'remote',
+      'subjectId',
+      'calendarId',
+    ])
+
+    // TODO: check if IDs are valid
+
+    // Create event
+    const newEvent = new Event()
+
+    newEvent.start = startDate
+    newEvent.end = endDate
+    newEvent.remote = remote
+    // associate event type
+    newEvent.event_type_id = eventTypeId
+    // associate event subject
+    newEvent.subject_id = subjectId
+    // associate event subject
+    newEvent.calendar_id = calendarId
+
+    await newEvent.save()
+
+    return response.status(201).send(null)
   }
-  public async update({ auth }: HttpContextContract) {
+  public async update({ auth, request, params, response }: HttpContextContract) {
     await auth.authenticate()
-    // TODO
-    return
+
+    const { startDate, endDate, eventTypeId, remote, subjectId, calendarId } = request.only([
+      'startDate',
+      'endDate',
+      'eventTypeId',
+      'remote',
+      'subjectId',
+      'calendarId',
+    ])
+
+    // TODO: check if IDs are valid
+
+    // update event
+    await Event.updateOrCreate(
+      { id: params.id },
+      {
+        start: startDate,
+        end: endDate,
+        remote,
+        event_type_id: eventTypeId,
+        subject_id: subjectId,
+        calendar_id: calendarId, // unecessary
+      }
+    )
+
+    return response.status(200).send(null)
   }
-  public async delete({ auth }: HttpContextContract) {
+  public async destroy({ auth, params, response }: HttpContextContract) {
     await auth.authenticate()
 
     if (!params?.id) {
@@ -33,6 +83,6 @@ export default class EventsController {
     const event = await Event.findOrFail(params.id)
     await event.delete()
 
-    return response.status(200).send()
+    return response.status(200).send(null)
   }
 }

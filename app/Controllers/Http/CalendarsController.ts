@@ -27,7 +27,9 @@ export default class CalendarsController {
       .where('id', calendarID)
       .preload('classe')
       .preload('specialisation')
-      .preload('events')
+      .preload('events', (query) => {
+        query.preload('subject').preload('eventType')
+      })
       .first()
 
     return calendar

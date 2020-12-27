@@ -13,6 +13,15 @@ export default class Event extends BaseModel {
   @column()
   public end: DateTime
 
+  @column()
+  public calendar_id: number
+
+  @column()
+  public subject_id: number
+
+  @column()
+  public event_type_id: number
+
   // event_type_id
   @belongsTo(() => EventType, {
     foreignKey: 'event_type_id',
