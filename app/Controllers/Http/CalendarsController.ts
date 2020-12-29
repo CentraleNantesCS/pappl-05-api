@@ -28,7 +28,7 @@ export default class CalendarsController {
       .preload('classe')
       .preload('specialisation')
       .preload('events', (query) => {
-        query.preload('subject').preload('eventType')
+        query.preload('subject').preload('eventType').preload('host')
       })
       .first()
 

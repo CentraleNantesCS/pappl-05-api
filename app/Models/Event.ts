@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import EventType from './EventType'
 import Subject from './Subject'
+import User from './User'
 
 export default class Event extends BaseModel {
   @column({ isPrimary: true })
@@ -21,6 +22,14 @@ export default class Event extends BaseModel {
 
   @column()
   public event_type_id: number
+
+  @column()
+  public user_id: number
+
+  @belongsTo(() => User, {
+    foreignKey: 'user_id',
+  })
+  public host: BelongsTo<typeof User>
 
   // event_type_id
   @belongsTo(() => EventType, {

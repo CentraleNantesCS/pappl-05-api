@@ -16,13 +16,22 @@ export default class EventsController {
   public async store({ auth, request, response }: HttpContextContract) {
     await auth.authenticate()
 
-    const { startDate, endDate, eventTypeId, remote, subjectId, calendarId } = request.only([
+    const {
+      startDate,
+      endDate,
+      eventTypeId,
+      remote,
+      subjectId,
+      calendarId,
+      userId,
+    } = request.only([
       'startDate',
       'endDate',
       'eventTypeId',
       'remote',
       'subjectId',
       'calendarId',
+      'userId',
     ])
 
     // TODO: check if IDs are valid
@@ -39,6 +48,8 @@ export default class EventsController {
     newEvent.subject_id = subjectId
     // associate event subject
     newEvent.calendar_id = calendarId
+    // associate event subject
+    newEvent.user_id = userId ?? null
 
     await newEvent.save()
 
@@ -47,13 +58,22 @@ export default class EventsController {
   public async update({ auth, request, params, response }: HttpContextContract) {
     await auth.authenticate()
 
-    const { startDate, endDate, eventTypeId, remote, subjectId, calendarId } = request.only([
+    const {
+      startDate,
+      endDate,
+      eventTypeId,
+      remote,
+      subjectId,
+      calendarId,
+      userId,
+    } = request.only([
       'startDate',
       'endDate',
       'eventTypeId',
       'remote',
       'subjectId',
       'calendarId',
+      'userId',
     ])
 
     // TODO: check if IDs are valid
@@ -67,7 +87,8 @@ export default class EventsController {
         remote,
         event_type_id: eventTypeId,
         subject_id: subjectId,
-        calendar_id: calendarId, // unecessary
+        calendar_id: calendarId, // unecessary,
+        user_id: userId,
       }
     )
 
