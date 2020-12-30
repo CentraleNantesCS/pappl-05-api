@@ -1,3 +1,5 @@
+import Event from 'App/Models/Event'
+import User from 'App/Models/User'
 import { add, set, getHours, getMinutes } from 'date-fns'
 import { TIME_PERIODS } from './ExcelExport'
 
@@ -14,6 +16,7 @@ export const getDateOfISOWeek = (weekNumber: number, year: Number) => {
   else ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay())
   return ISOweekStart
 }
+
 /**
  * Converts a week + day + period combo into and actual interval
  *
@@ -43,11 +46,24 @@ export const dayPeriodToInterval = (weekStartDate: Date, dayIndex: number, perio
   }
   return interval
 }
+
 /**
  * Converts a date into a human readable time string
  *
  * @param date a valid date object
  */
 export const getTime = (date: Date) => {
-  return `${getHours(date)}h${getMinutes(date)}`
+  return `${getHours(date).toString().padStart(2, '0')}h${getMinutes(date)
+    .toString()
+    .padStart(2, '0')}`
+}
+
+const fullNameOrAcronym = (u: User) => {
+  return u.acronym ? u.acronym : `${u.firstname} ${u.lastname}`
+}
+
+export const eventToString = (event: Event) => {
+  return `${event.eventType.acronym} - ${event.subject.acronym}${
+    event.host ? ' - ' + fullNameOrAcronym(event.host) : ''
+  }${event.remote ? ' - dist' : ''}`
 }

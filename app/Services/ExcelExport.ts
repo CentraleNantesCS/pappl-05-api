@@ -1,8 +1,17 @@
 import Logger from '@ioc:Adonis/Core/Logger'
 import Calendar from 'App/Models/Calendar'
 import * as ExcelJS from 'exceljs'
-import { add, eachWeekOfInterval, format, getWeek, Interval } from 'date-fns'
-import { getDateOfISOWeek, dayPeriodToInterval, getTime } from './ExcelExportHelpers'
+import {
+  add,
+  eachWeekOfInterval,
+  format,
+  getWeek,
+  Interval,
+  isBefore,
+  isWithinInterval,
+} from 'date-fns'
+import { getDateOfISOWeek, dayPeriodToInterval, getTime, eventToString } from './ExcelExportHelpers'
+import Event from 'App/Models/Event'
 
 const PERIOD_WIDTH = 40
 const PERIOD_HEIGHT = 45
@@ -83,7 +92,6 @@ class ExcelExport {
     const topRow = this.sheet.getRow(1)
     let startColumn = 6
     const mergedCellCount = TIME_PERIODS_ARRAY.length
-
     // Set the week days
     DAYS_OF_WEEK.forEach((day) => {
       this.sheet.mergeCells(1, startColumn, 1, startColumn + mergedCellCount - 1)
@@ -122,15 +130,15 @@ class ExcelExport {
    * setYearSchedule
    * @param startYear
    */
-  public setYearSchedule(startYear: number) {
+  public setYearSchedule(startYear: number, events: Event[]) {
     const yearWeekDates = this.yearWeeks(startYear)
-    yearWeekDates.forEach((weekDate) => this.setWeekSchedule(weekDate))
+    yearWeekDates.forEach((weekDate) => this.setWeekSchedule(weekDate, events))
   }
 
   /**
    * setWeekSchedule
    */
-  public setWeekSchedule(weekDate: Date) {
+  public setWeekSchedule(weekDate: Date, events: Event[]) {
     const weekNumber = getWeek(weekDate, {
       weekStartsOn: 1, // Always start on monday
     })
@@ -142,9 +150,16 @@ class ExcelExport {
       const dayIndex = DAYS_OF_WEEK.map((day) => day.toLowerCase()).indexOf(day)
 
       const interval = dayPeriodToInterval(weekDate, dayIndex, period)
-      // TODO: get events in interval
-
-      weekSchedule[key] = `${getTime(interval.start)} - ${getTime(interval.end)}`
+      const periodEvents = events.filter(
+        (event) => isWithinInterval(event.start, interval) && isWithinInterval(event.end, interval)
+      )
+      if (periodEvents.length > 0) {
+        let cellContent = `${getTime(interval.start)} - ${getTime(interval.end)}`
+        periodEvents.forEach((event) => {
+          cellContent = `${eventToString(event)} \r\n ${cellContent}`
+        })
+        weekSchedule[key] = cellContent
+      }
     })
 
     const rowData: WorksheetColumns = {
@@ -169,14 +184,21 @@ class ExcelExport {
    */
   public async export(calendarId: number) {
     Logger.info('Exporting Calendar #' + calendarId)
-    // const calendar = await Calendar.findOrFail(calendarId)
-    // console.log(calendar)
     try {
-      const startYear = 2020
+      const calendar = await Calendar.query()
+        .where('id', calendarId)
+        .preload('classe')
+        .preload('specialisation')
+        .preload('events', (query) => {
+          query.preload('subject').preload('eventType').preload('host')
+        })
+        .first()
+
+      const startYear = calendar?.classe.start_year
 
       this.setColumns()
       this.setHeaders()
-      this.setYearSchedule(startYear)
+      this.setYearSchedule(startYear, calendar?.events)
 
       await this.workbook.xlsx.writeFile('Export.xlsx')
     } catch (error) {
