@@ -1,7 +1,9 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Application from '@ioc:Adonis/Core/Application'
 
 import Calendar from 'App/Models/Calendar'
 import EventType from 'App/Models/EventType'
+import ExcelExport from 'App/Services/ExcelExport'
 
 export default class CalendarsController {
   /**
@@ -35,12 +37,17 @@ export default class CalendarsController {
     return calendar
   }
 
-  public async getEventTypes({ auth }: HttpContextContract) {
-    await auth.authenticate()
-    //
-    const eventTypes = await EventType.query()
+  public async export({ auth, params, response }: HttpContextContract) {
+    const calendarID = params?.id ?? null
 
-    return eventTypes
+    if (!calendarID) {
+      response.status(404).send(null)
+    }
+
+    const path = Application.tmpPath(`export-${new Date().getTime()}.xlxs`)
+    await ExcelExport.export(calendarID, path)
+
+    return response.attachment(path, `Export #${calendarID}.xlsx`)
   }
 
   public async store({ auth, request }: HttpContextContract) {

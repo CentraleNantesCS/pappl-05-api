@@ -12,6 +12,8 @@ import {
 } from 'date-fns'
 import { getDateOfISOWeek, dayPeriodToInterval, getTime, eventToString } from './ExcelExportHelpers'
 import Event from 'App/Models/Event'
+import * as STC from 'string-to-color'
+import Application from '@ioc:Adonis/Core/Application'
 
 const PERIOD_WIDTH = 40
 const PERIOD_HEIGHT = 45
@@ -182,7 +184,7 @@ class ExcelExport {
   /**
    * export
    */
-  public async export(calendarId: number) {
+  public async export(calendarId: number, path: String | null = null) {
     Logger.info('Exporting Calendar #' + calendarId)
     try {
       const calendar = await Calendar.query()
@@ -199,8 +201,11 @@ class ExcelExport {
       this.setColumns()
       this.setHeaders()
       this.setYearSchedule(startYear, calendar?.events)
-
-      await this.workbook.xlsx.writeFile('Export.xlsx')
+      if (!path) {
+        await this.workbook.xlsx.writeFile('Export.xlsx')
+      } else {
+        await this.workbook.xlsx.writeFile(path)
+      }
     } catch (error) {
       Logger.warn(error)
     }
