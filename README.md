@@ -26,45 +26,23 @@ cp .env.example .env
 # Run the migrations
 node ace migration:run
 
+# Run the database seeders
+node ace db:seed
+
 # Start the development serve
 yarn dev
 ```
 
+The project should be available on [http://localhost:3000/](http://localhost:3000/) and you can login using the seeded user info:
+
+```
+  email: 'admin@admin.fr'
+  password: 'password'
+```
+
 ## Docker
 
-The project includes a Dockerfile if you would like to run it in a container.
-
-```Dockerfile
-FROM tarampampam/node:13-alpine
-
-# Install pm2
-RUN npm install pm2 -g
-
-# Create the app dir & tmp folder
-RUN mkdir -p /app/tmp
-
-# Set working directory
-WORKDIR /app
-
-# Copy over package.json files
-COPY package.json ./
-COPY yarn.lock ./
-
-# Install all packages
-RUN yarn install --silent
-
-# Copy over source code
-COPY . .
-
-# Build the project
-RUN yarn build
-
-# Expose port 3333 to outside world
-EXPOSE 3333
-
-# Start server up
-CMD ["pm2-runtime","./build/server.js"]
-```
+The project includes a [Dockerfile](./Dockerfile) if you would like to run it in a container.
 
 ## Stack
 
