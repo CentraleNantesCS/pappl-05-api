@@ -52,7 +52,7 @@ export default class SubjectsController {
   /**
    * Delete
    */
-  public async delete({ auth, params, response }: HttpContextContract) {
+  public async destroy({ auth, params, response }: HttpContextContract) {
     await auth.authenticate()
 
     if (!params?.id) {

@@ -1,32 +1,29 @@
 FROM tarampampam/node:13-alpine
 
-# Use non-root user
-USER node
+# Install pm2
+RUN npm install pm2 -g
 
-# Make directory for app to live in
-# It's important to set user first or owner will be root
-RUN mkdir -p /home/node/app/
 
-# Make sure to create a tmp dir
-RUN mkdir -p /home/node/app/tmp
+RUN mkdir -p /app/tmp
 
 # Set working directory
-WORKDIR /home/node/app
+WORKDIR /app
 
 # Copy over package.json files
-COPY package*.json ./
+COPY package.json ./
+COPY yarn.lock ./
 
 # Install all packages
-RUN yarn
+RUN yarn install --silent
 
 # Copy over source code
 COPY . .
 
-# Build AdonisJS for production
-RUN yarn build --production
+# Build the project
+RUN yarn build
 
 # Expose port 3333 to outside world
 EXPOSE 3333
 
 # Start server up
-CMD [ "node", "./build/server.js" ]
+CMD ["pm2-runtime","./build/server.js"]
