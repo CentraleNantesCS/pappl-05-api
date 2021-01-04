@@ -12,6 +12,7 @@ export default class PeriodsController {
 
     return periods
   }
+
   /**
    * Store
    */

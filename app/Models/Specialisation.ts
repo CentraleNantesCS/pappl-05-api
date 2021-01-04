@@ -1,7 +1,9 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import Subject from 'App/Models/Subject'
-
+/**
+ * Option
+ */
 export default class Specialisation extends BaseModel {
   @column({ isPrimary: true })
   public id: number
@@ -12,6 +14,9 @@ export default class Specialisation extends BaseModel {
   @column()
   public name: string
 
+  /**
+   * Matieres associees
+   */
   @manyToMany(() => Subject, {
     localKey: 'id',
     pivotForeignKey: 'specialisation_id',

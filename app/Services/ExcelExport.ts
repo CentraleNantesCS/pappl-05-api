@@ -15,12 +15,21 @@ import Event from 'App/Models/Event'
 import * as STC from 'string-to-color'
 import Application from '@ioc:Adonis/Core/Application'
 
+/**
+ * CELL STYLING CONSTANTS
+ */
 const PERIOD_WIDTH = 40
 const PERIOD_HEIGHT = 45
 const SMALL_WIDTH = 4
+
+/**
+ * SCHOOL YEAR INTERVAL
+ */
 const YEAR_START_WEEK_NUMBER = 36
 const YEAR_END_WEEK_NUMBER = 27
+
 const DAYS_OF_WEEK = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi']
+
 export const TIME_PERIODS = {
   m1: {
     start: '08:00',
@@ -40,8 +49,10 @@ export const TIME_PERIODS = {
   },
 }
 
+// [m1, m2, s1, s2]
 const TIME_PERIODS_ARRAY = Object.keys(TIME_PERIODS).map((v) => v.toUpperCase())
 
+// [{ lundi-m1 }, {lundi-m2}...]
 const WEEK_COLUMNS = []
 
 DAYS_OF_WEEK.forEach((day) => {
@@ -63,6 +74,11 @@ interface WorksheetColumns {
   [key: string]: any
 }
 
+/**
+ * Excel Export
+ *
+ * @docs https://github.com/exceljs/exceljs
+ */
 class ExcelExport {
   private workbook: ExcelJS.Workbook
   public weekColumns: ExcelJS.Column
@@ -130,7 +146,7 @@ class ExcelExport {
 
   /**
    * setYearSchedule
-   * @param startYear
+   * @param startYear (e.g for 2020-2021, startYear = 2020)
    */
   public setYearSchedule(startYear: number, events: Event[]) {
     const yearWeekDates = this.yearWeeks(startYear)
@@ -139,6 +155,9 @@ class ExcelExport {
 
   /**
    * setWeekSchedule
+   *
+   * @param weekDate week start date (date on monday of that week)
+   * @param events all the calendar events
    */
   public setWeekSchedule(weekDate: Date, events: Event[]) {
     const weekNumber = getWeek(weekDate, {
@@ -182,7 +201,10 @@ class ExcelExport {
   }
 
   /**
-   * export
+   * Export selected calendar
+   *
+   * @param calendarId Calendar ID
+   * @param path export path (.xlsx)
    */
   public async export(calendarId: number, path: String | null = null) {
     Logger.info('Exporting Calendar #' + calendarId)
@@ -212,4 +234,5 @@ class ExcelExport {
   }
 }
 
+// Export singleton
 export default new ExcelExport()

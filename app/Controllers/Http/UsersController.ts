@@ -39,12 +39,22 @@ export default class UsersController {
 
     return newUser
   }
+
+  /**
+   * Update
+   */
   public async update({ auth }: HttpContextContract) {
     await auth.authenticate()
+    // TODO
     return
   }
-  public async delete({ auth }: HttpContextContract) {
+
+  /**
+   * Delete
+   */
+  public async destroy({ auth }: HttpContextContract) {
     await auth.authenticate()
+    // TODO
     return
   }
 }

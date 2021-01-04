@@ -11,12 +11,14 @@ export default class CalendarsController {
    */
   public async index({ auth }: HttpContextContract) {
     await auth.authenticate()
-    //
     const calendars = await Calendar.query().preload('classe').preload('specialisation')
 
     return calendars
   }
 
+  /**
+   * single calendar
+   */
   public async show({ auth, params, response }: HttpContextContract) {
     await auth.authenticate()
     const calendarID = params?.id ?? null
@@ -37,6 +39,9 @@ export default class CalendarsController {
     return calendar
   }
 
+  /**
+   * Export
+   */
   public async export({ auth, params, response }: HttpContextContract) {
     const calendarID = params?.id ?? null
 
@@ -50,6 +55,9 @@ export default class CalendarsController {
     return response.attachment(path, `Export #${calendarID}.xlsx`)
   }
 
+  /**
+   * Store
+   */
   public async store({ auth, request }: HttpContextContract) {
     await auth.authenticate()
 
@@ -62,12 +70,22 @@ export default class CalendarsController {
 
     return
   }
+
+  /**
+   * Update
+   */
   public async update({ auth }: HttpContextContract) {
     await auth.authenticate()
+    // TODO
     return
   }
-  public async delete({ auth }: HttpContextContract) {
+
+  /**
+   * Delete
+   */
+  public async destroy({ auth }: HttpContextContract) {
     await auth.authenticate()
+    // TODO
     return
   }
 }

@@ -7,23 +7,31 @@ import Event from './Event'
 export default class Calendar extends BaseModel {
   @column({ isPrimary: true })
   public id: number
-
+  /**
+   * Promotion
+   */
   @column()
   public classe_id: number
-
-  @column()
-  public specialisation_id: number
 
   @belongsTo(() => Class, {
     foreignKey: 'classe_id',
   })
   public classe: BelongsTo<typeof Class>
 
+  /**
+   * Option
+   */
+  @column()
+  public specialisation_id: number
+
   @belongsTo(() => Specialisation, {
     foreignKey: 'specialisation_id',
   })
   public specialisation: BelongsTo<typeof Specialisation>
 
+  /**
+   * Evenements du calendrier
+   */
   @hasMany(() => Event, {
     foreignKey: 'calendar_id',
   })

@@ -58,10 +58,18 @@ export const getTime = (date: Date) => {
     .padStart(2, '0')}`
 }
 
+/**
+ * String representation of a given user
+ * @param u User instance
+ */
 const fullNameOrAcronym = (u: User) => {
   return u.acronym ? u.acronym : `${u.firstname} ${u.lastname}`
 }
 
+/**
+ * String representation of this event
+ * @param event an Event instance
+ */
 export const eventToString = (event: Event) => {
   return `${event.eventType.acronym} - ${event.subject.acronym}${
     event.host ? ' - ' + fullNameOrAcronym(event.host) : ''

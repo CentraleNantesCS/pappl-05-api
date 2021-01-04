@@ -94,6 +94,7 @@ export default class EventsController {
 
     return response.status(200).send(null)
   }
+
   public async destroy({ auth, params, response }: HttpContextContract) {
     await auth.authenticate()
 

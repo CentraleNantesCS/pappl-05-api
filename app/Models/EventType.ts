@@ -10,6 +10,7 @@ export default class EventType extends BaseModel {
 
   @column()
   public name: string
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
