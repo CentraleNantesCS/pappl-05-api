@@ -18,8 +18,8 @@ import Application from '@ioc:Adonis/Core/Application'
 /**
  * CELL STYLING CONSTANTS
  */
-const PERIOD_WIDTH = 40
-const PERIOD_HEIGHT = 45
+const PERIOD_WIDTH = 25
+const PERIOD_HEIGHT = 80
 const SMALL_WIDTH = 4
 
 /**
@@ -112,7 +112,7 @@ class ExcelExport {
     const mergedCellCount = TIME_PERIODS_ARRAY.length
     // Set the week days
     DAYS_OF_WEEK.forEach((day) => {
-      this.sheet.mergeCells(1, startColumn, 1, startColumn + mergedCellCount - 1)
+      // this.sheet.mergeCells(1, startColumn, 1, startColumn + mergedCellCount - 1)
       this.sheet.getCell(1, startColumn).value = day
       startColumn += mergedCellCount
     })
@@ -171,6 +171,9 @@ class ExcelExport {
       const dayIndex = DAYS_OF_WEEK.map((day) => day.toLowerCase()).indexOf(day)
 
       const interval = dayPeriodToInterval(weekDate, dayIndex, period)
+      // TODO: instead of looking up events that happen in a given period, change it so that we lookup periods that happen in an event
+      // ToDo WARNING FIXME: events that don't match any of the above-specified periods will not be exported,
+      // meaning, if your event is from 1h45 - 3h46, it won't appear in S1 because of the extra minute (45+1)
       const periodEvents = events.filter(
         (event) => isWithinInterval(event.start, interval) && isWithinInterval(event.end, interval)
       )
