@@ -52,9 +52,16 @@ export default class UsersController {
   /**
    * Delete
    */
-  public async destroy({ auth }: HttpContextContract) {
+  public async destroy({ auth, params, response }: HttpContextContract) {
     await auth.authenticate()
-    // TODO
-    return
+
+    if (!params?.id) {
+      return response.status(404)
+    }
+
+    const user = await User.findOrFail(params.id)
+    await user.delete()
+
+    return response.status(200).send(null)
   }
 }

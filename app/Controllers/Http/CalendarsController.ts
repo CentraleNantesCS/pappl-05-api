@@ -83,9 +83,16 @@ export default class CalendarsController {
   /**
    * Delete
    */
-  public async destroy({ auth }: HttpContextContract) {
+  public async destroy({ auth, params, response }: HttpContextContract) {
     await auth.authenticate()
-    // TODO
-    return
+
+    if (!params?.id) {
+      return response.status(404)
+    }
+
+    const calendar = await Calendar.findOrFail(params.id)
+    await calendar.delete()
+
+    return response.status(200).send(null)
   }
 }
