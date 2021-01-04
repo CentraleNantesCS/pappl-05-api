@@ -7,9 +7,9 @@ This project contains the REST API used in our project.
 - [NodeJS LTS](https://nodejs.org/en/)
 - [NPM](https://www.npmjs.com/)
 - [Yarn](https://yarnpkg.com/)
-- [AdonisJS 5](http://adonisjs.com/)
+- [AdonisJS 5](https://preview.adonisjs.com/)
 
-**Note:** If you are new to AdonisJS, I recommend to watch
+**Note:** If you are new to AdonisJS 5, I recommend to watch
 [AdonisJs V5 Tour](https://www.youtube.com/watch?v=TysfaNcFX_Y).
 
 ## Getting Started
